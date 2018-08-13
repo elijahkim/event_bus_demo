@@ -16,9 +16,11 @@ defmodule EventBusDemo.EventBus do
   end
 
   def handle_call({:broadcast, message}, _from, %{subscribers: subs} = state) do
-    for sub <- subs do
+    subs
+    |> Task.async_stream(fn sub ->
       :ok = GenServer.call(sub, {:message, message})
-    end
+    end)
+    |> Stream.run()
 
     {:reply, :ok, state}
   end
