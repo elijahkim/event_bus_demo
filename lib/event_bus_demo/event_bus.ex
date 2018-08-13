@@ -1,33 +1,42 @@
 defmodule EventBusDemo.EventBus do
-  use GenServer
+  use GenStage
 
-  @name __MODULE__
-
+  @doc """
+  Starts the manager.
+  """
   def start_link([]) do
-    GenServer.start_link(@name, [], name: @name)
+    GenStage.start_link(__MODULE__, :ok, name: __MODULE__)
   end
 
-  def init([]) do
-    {:ok, %{subscribers: []}}
+  @doc """
+  Sends an event and returns only after the event is dispatched.
+  """
+  def sync_notify(event, timeout \\ 5000) do
+    GenStage.call(__MODULE__, {:notify, event}, timeout)
   end
 
-  def handle_call(:get_subscribers, _from, %{subscribers: subs} = state) do
-    {:reply, subs, state}
+  ## Callbacks
+
+  def init(:ok) do
+    {:producer, {:queue.new, 0}, dispatcher: GenStage.BroadcastDispatcher}
   end
 
-  def handle_call({:broadcast, message}, _from, %{subscribers: subs} = state) do
-    subs
-    |> Task.async_stream(fn sub ->
-      :ok = GenServer.call(sub, {:message, message})
-    end)
-    |> Stream.run()
-
-    {:reply, :ok, state}
+  def handle_call({:notify, event}, from, {queue, demand}) do
+    dispatch_events(:queue.in({from, event}, queue), demand, [])
   end
 
-  def handle_cast({:subscribe, pid}, %{subscribers: subs} = state) do
-    subs = [pid | subs]
+  def handle_demand(incoming_demand, {queue, demand}) do
+    dispatch_events(queue, incoming_demand + demand, [])
+  end
 
-    {:noreply, %{state | subscribers: subs}}
+  defp dispatch_events(queue, demand, events) do
+    with d when d > 0 <- demand,
+         {item, queue} = :queue.out(queue),
+         {:value, {from, event}} <- item do
+      GenStage.reply(from, :ok)
+      dispatch_events(queue, demand - 1, [event | events])
+    else
+      _ -> {:noreply, Enum.reverse(events), {queue, demand}}
+    end
   end
 end

@@ -1,5 +1,5 @@
 for _i <- 1..10 do
-  {:ok, pid} = GenServer.start_link(EventBusDemo.MockConsumer, self())
+  {:ok, pid} = GenStage.start_link(EventBusDemo.MockConsumer, self())
 
   EventBusDemo.subscribe(pid)
 end

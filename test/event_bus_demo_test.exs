@@ -27,8 +27,8 @@ defmodule EventBusDemoTest do
 
   describe "#broadcast" do
     test "It broadcasts to all subscribed pids" do
-      {:ok, pid} = GenServer.start_link(MockConsumer, self())
-      :ok = EventBusDemo.subscribe(pid)
+      {:ok, pid} = GenStage.start_link(MockConsumer, self())
+      {:ok, pid} = EventBusDemo.subscribe(pid)
 
       EventBusDemo.broadcast(:hello_world)
 

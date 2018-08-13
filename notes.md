@@ -15,3 +15,12 @@ Benchmarking basic_bus...
 Name                ips        average  deviation         median         99th %
 basic_bus        0.0495        20.20 s     ±0.00%        20.20 s        20.20 s
 ```
+
+# GenStage
+
+```
+Benchmarking basic_bus...
+
+Name                ips        average  deviation         median         99th %
+basic_bus        0.0990        10.10 s   ±223.52%      0.00392 s        50.49 s
+```

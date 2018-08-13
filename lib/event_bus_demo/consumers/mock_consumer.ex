@@ -1,15 +1,25 @@
 defmodule EventBusDemo.MockConsumer do
-  use GenServer
-  import Logger
+  use GenStage
 
-  def init(pid) do
-    {:ok, pid}
+  def start_link(pid) do
+    GenStage.start_link(__MODULE__, pid)
   end
 
-  def handle_call({:message, message}, _from, pid) do
-    :timer.sleep(100)
-    Process.send(pid, message, [])
+  # Callbacks
 
-    {:reply, :ok, pid}
+  def init(pid) do
+    # Starts a permanent subscription to the broadcaster
+    # which will automatically start requesting items.
+    {:consumer, pid}
+  end
+
+  def handle_events(events, _from, pid) do
+    :timer.sleep(100)
+
+    for event <- events do
+      Process.send(pid, event, [])
+    end
+
+    {:noreply, [], pid}
   end
 end

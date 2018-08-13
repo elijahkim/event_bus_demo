@@ -6,14 +6,14 @@ defmodule EventBusDemo do
   alias EventBusDemo.EventBus
 
   def get_subscribers() do
-    GenServer.call(EventBus, :get_subscribers)
+    GenStage.call(EventBus, :get_subscribers)
   end
 
   def subscribe(pid) do
-    GenServer.cast(EventBus, {:subscribe, pid})
+    GenStage.sync_subscribe(pid, to: EventBus)
   end
 
-  def broadcast(message) do
-    GenServer.call(EventBus, {:broadcast, message})
+  def broadcast(event) do
+    GenStage.call(EventBus, {:notify, event}, :infinity)
   end
 end
