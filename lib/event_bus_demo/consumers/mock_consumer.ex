@@ -7,7 +7,7 @@ defmodule EventBusDemo.MockConsumer do
   end
 
   def handle_call({:message, message}, _from, pid) do
-    Process.sleep(1_000)
+    :timer.sleep(100)
     Process.send(pid, message, [])
 
     {:reply, :ok, pid}

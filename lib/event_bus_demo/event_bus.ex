@@ -15,16 +15,17 @@ defmodule EventBusDemo.EventBus do
     {:reply, subs, state}
   end
 
-  def handle_cast({:subscribe, pid}, %{subscribers: subs} = state) do
-    subs = [pid | subs]
-    {:noreply, %{state | subscribers: subs}}
-  end
-
-  def handle_cast({:broadcast, message}, %{subscribers: subs} = state) do
+  def handle_call({:broadcast, message}, _from, %{subscribers: subs} = state) do
     for sub <- subs do
       :ok = GenServer.call(sub, {:message, message})
     end
 
-    {:noreply, state}
+    {:reply, :ok, state}
+  end
+
+  def handle_cast({:subscribe, pid}, %{subscribers: subs} = state) do
+    subs = [pid | subs]
+
+    {:noreply, %{state | subscribers: subs}}
   end
 end

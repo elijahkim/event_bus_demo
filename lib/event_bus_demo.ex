@@ -14,6 +14,6 @@ defmodule EventBusDemo do
   end
 
   def broadcast(message) do
-    GenServer.cast(EventBus, {:broadcast, message})
+    GenServer.call(EventBus, {:broadcast, message})
   end
 end

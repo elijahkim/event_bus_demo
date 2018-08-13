@@ -1,4 +1,4 @@
-for i <- 1..1_000 do
+for _i <- 1..10 do
   {:ok, pid} = GenServer.start_link(EventBusDemo.MockConsumer, self())
 
   EventBusDemo.subscribe(pid)
@@ -6,8 +6,8 @@ end
 
 Benchee.run(%{
   "basic_bus" => fn ->
-    for event <- 1..1_000_000 do
-      EventBusDemo.broadcast("event #{event}")
+    for _i <- 1..100 do
+      EventBusDemo.broadcast(:hello_world)
     end
-  end,
+  end
 })
