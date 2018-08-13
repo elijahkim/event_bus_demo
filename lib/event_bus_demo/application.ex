@@ -10,6 +10,7 @@ defmodule EventBusDemo.Application do
     children = [
       # Starts a worker by calling: EventBusDemo.Worker.start_link(arg)
       # {EventBusDemo.Worker, arg},
+      {EventBusDemo.EventBus, []},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
