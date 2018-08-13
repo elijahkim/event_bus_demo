@@ -1,5 +1,10 @@
 defmodule EventBusDemoTest do
   use ExUnit.Case
+
+  import ExUnit.CaptureLog
+
+  alias EventBusDemo.MockConsumer
+
   doctest EventBusDemo
 
   describe "#get_subscribers" do
@@ -22,7 +27,8 @@ defmodule EventBusDemoTest do
 
   describe "#broadcast" do
     test "It broadcasts to all subscribed pids" do
-      :ok = EventBusDemo.subscribe(self())
+      {:ok, pid} = GenServer.start_link(MockConsumer, self())
+      :ok = EventBusDemo.subscribe(pid)
 
       EventBusDemo.broadcast(:hello_world)
 

@@ -22,7 +22,7 @@ defmodule EventBusDemo.EventBus do
 
   def handle_cast({:broadcast, message}, %{subscribers: subs} = state) do
     for sub <- subs do
-      Process.send(sub, message, [])
+      :ok = GenServer.call(sub, {:message, message})
     end
 
     {:noreply, state}
