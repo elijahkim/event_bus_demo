@@ -3,16 +3,7 @@ defmodule EventBusDemo do
   Documentation for EventBusDemo.
   """
 
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> EventBusDemo.hello
-      :world
-
-  """
-  def hello do
-    :world
+  def get_subscribers() do
+    []
   end
 end
