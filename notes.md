@@ -1,3 +1,15 @@
+Ch 0) About me
+  * Work at Frame.io
+    - At Frame.io, we’re powering the future of creative collaboration. Over
+      500,000 video professionals use Frame.io to seamlessly share media and
+      gather timestamped feedback from team members and clients. Simply put, we
+      help companies create better video, together.
+  * monkeypatchr on twitter and instagram... elijahkim on github
+  * Been writing elixir for about 3 years
+  * Terrible stage fright / Never spoke at a conference before / Crazy amounts
+    of imposter syndrome / I'm about to do some live coding.
+    Good luck to all of you.
+
 Ch 1) What is an event bus?
   * https://github.com/google/guava/wiki/EventBusExplained
   * http://www.rribbit.org/eventbus.html
