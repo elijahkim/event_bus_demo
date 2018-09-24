@@ -57,7 +57,7 @@ Ch 3) Build a simple event bus
   1) Subscribe to event bus
   2) Notify event to the event bus
   3) Broadcast events
-  4) Pull based events
+  4) Don't overload consumers
 
   1) Simple single process based event bus
   2) Same thing with `Task.async_stream`
